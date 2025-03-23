@@ -3,7 +3,53 @@ import { User } from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 
 export async function login(req, res){
-    res.send("Login Route");
+    try{
+        const {email, password} = req.body;
+        if(!email || !password){
+            return res.status(400).json({
+                success: false,
+                message: "Please fill all fields"
+            })
+        }
+
+        const user = await User.findOne({email:email});
+
+        if(!user){
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            })
+        }else{
+            const isMatch = await bcryptjs.compare(password, user.password);
+            if(!isMatch){
+                return res.status(401).json({
+                    success: false,
+                    message: "Incorrect password"
+                })
+            }
+            
+            generateTokenAndSetCookie(user._id, res);
+
+            return res.status(200).json({
+                success: true,
+                message: "User logged in successfully",
+                user: {
+                    _id: user._id,
+                    username: user.username,
+                    email: user.email,
+                    image: user.image
+                }
+            })
+    
+        }
+    }catch(e){
+        console.error(e);
+        return res.status(500).json({
+            success: false,
+            message: "Server Error"
+        })
+    }
+    
 }
 
 export async function signup(req, res){
