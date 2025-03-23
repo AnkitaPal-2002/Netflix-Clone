@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomeScreen from "./pages/Home/HomeScreen";
 import HomePage from "./pages/Home/HomePage";
 import Footer from "./components/Footer";
+import RegisterPage from "./pages/RegisterPage";
 
 const App = () => {
   return (
@@ -10,7 +11,8 @@ const App = () => {
       <Router>
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
-            <Route path="/" element={<HomePage />}></Route>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/register" element={<RegisterPage />} />
           </Routes>
         </Suspense>
         <Footer />
