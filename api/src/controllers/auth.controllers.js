@@ -1,3 +1,4 @@
+import { generateTokenAndSetCookie } from "../utils/generateTokens.js";
 import { User } from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 
@@ -68,13 +69,19 @@ export async function signup(req, res){
 
         //postman test
 
-        await newUser.save();
+      
+            generateTokenAndSetCookie(newUser._id, res);
+            await newUser.save();
+            return res.status(200).json({
+                success: true,
+                message: "User registered successfully",
+                user: newUser
+            })
 
-        return res.status(200).json({
-            success: true,
-            message: "User registered successfully",
-            user: newUser
-        })
+        
+
+        
+        
 
 
 
@@ -85,5 +92,19 @@ export async function signup(req, res){
 }
 
 export async function logout(req, res){
-    res.send("Logout Route");
+    try{
+        res.clearCookie("jwt-netflix");
+        return res.status(200).json({
+            success: true,
+            message: "Logged out successfully"
+        })
+
+    }catch(e){
+        console.log("Error in logout controller", e.message);
+        return res.status(500).json({
+            success: false,
+            message: "Server Error"
+        })
+        
+    }
 }
