@@ -24,14 +24,21 @@ const AuthScreen = () => {
 
   return (
     <div
-      className="relative h-screen bg-cover bg-center bg-no-repeat"
+      className="relative flex flex-col min-h-screen bg-no-repeat"
       style={{
-        backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(${heroBG})`, // Dark overlay
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(${heroBG})`,
+        backgroundSize: "contain", // Prevents zooming
+        backgroundPosition: "center top", // Ensures full visibility
+        backgroundRepeat: "no-repeat",
+        backgroundColor: "#000", // Fills any empty space
       }}
     >
       {/* Navbar */}
-      <header className="max-w-screen-lg mx-auto flex items-center justify-between p-6">
+      <header className="max-w-screen-lg mx-auto flex items-center justify-between p-6 w-full">
+        {/* Logo aligned to the left */}
         <img src={netflixLogo} alt="Netflix Logo" className="w-36 md:w-48" />
+
+        {/* Sign In button aligned to the right */}
         <Link
           to={"/login"}
           className="bg-red-600 text-xl px-6 py-3 rounded flex items-center justify-center font-semibold hover:bg-red-700 transition text-white"
