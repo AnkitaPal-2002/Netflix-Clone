@@ -7,9 +7,12 @@ import authRoutes from './src/routes/auth.routes.js';
 import { ENV_VARS } from './src/config/envVars.js';
 import { connectDB } from './src/config/db.config.js';
 
+
+
 connectDB();  // Connect to MongoDB database
 
 const app = express();
+app.set('view engine', 'hbs');
 const PORT = ENV_VARS.PORT;
 
 
@@ -21,10 +24,14 @@ app.get('/',(req, res)=>{
 
 app.use('/api/v1/auth', authRoutes);
 
+import { User } from './src/models/user.model.js';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
+
 app.listen(PORT,()=>{
     console.log('Server is running on port',PORT);
 })
 
-//console.log("MONGO_URI : ",process.env.MONGO_URI);
+
 
 

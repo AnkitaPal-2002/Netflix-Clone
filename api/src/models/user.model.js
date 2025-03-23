@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import passportLocalMongoose from "passport-local-mongoose";
 
 const userSchema = mongoose.Schema({
     username:{
@@ -24,7 +25,13 @@ const userSchema = mongoose.Schema({
         type: Array,
         default: []
     },
+    isAdmin:{
+        type: Boolean,
+        default: false // default value is false for regular users
+    }
 
 }, {timestamps: true});
+
+userSchema.plugin(passportLocalMongoose); // adds username and password fields to the schema
 
 export const User = mongoose.model("User", userSchema);
