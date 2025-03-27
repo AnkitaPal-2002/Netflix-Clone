@@ -1,5 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast, Toaster } from "sonner";
+
 import netflixLogo from "../../assets/netflix-logo.png";
 import heroBG from "../../assets/hero.png";
 import heroVid from "../../assets/frontend_public_hero-vid.m4v";
@@ -13,14 +18,34 @@ import kids from "../../assets/kids.png";
 import tv from "../../assets/tv.png";
 import { ChevronRight } from "lucide-react";
 
+// Zod validation schema
+const formSchema = z.object({
+  email: z.string().email("Invalid email address"),
+});
+
 const AuthScreen = () => {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    navigate("/signup?email=" + email);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(formSchema),
+    mode: "onBlur",
+  });
+
+  const onSubmit = (data) => {
+    toast.success("✅ Valid email! Redirecting...");
+    navigate("/register?email=" + data.email);
   };
+
+  useEffect(() => {
+    if (errors.email) {
+      toast.error(errors.email.message);
+    }
+  }, [errors.email]);
 
   return (
     <div>
@@ -69,19 +94,23 @@ const AuthScreen = () => {
             {/* Email Form */}
             <form
               className="mt-6 flex flex-col md:flex-row gap-4 w-full max-w-lg"
-              onSubmit={handleFormSubmit}
+              onSubmit={handleSubmit(onSubmit)}
             >
               <input
+                {...register("email")}
                 type="email"
                 placeholder="Email address"
-                className="p-3 rounded bg-black/80 border border-gray-500 text-white flex-1 focus:outline-none"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                className="p-3 rounded bg-black/80 border border-gray-500 text-white flex-1 focus:outline-none w-full"
               />
-              <button className="bg-red-600 text-xl px-6 py-3 rounded flex items-center justify-center font-semibold hover:bg-red-700 transition">
+
+              <button
+                className="bg-red-600 text-xl px-6 py-3 rounded font-semibold hover:bg-red-700 transition flex 
+              "
+              >
                 Get Started <ChevronRight className="size-8 ml-2" />
               </button>
             </form>
+            <Toaster position="top-right" />
           </div>
         </div>
 

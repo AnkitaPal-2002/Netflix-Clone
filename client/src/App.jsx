@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomeScreen from "./pages/Home/HomeScreen";
 import HomePage from "./pages/Home/HomePage";
 import Footer from "./components/Footer";
-import RegisterPage from "./pages/RegisterPage";
+import RegisterPage from "./pages/Register/RegisterPage";
+import LoginPage from "./pages/Login/LoginPage";
+import { Toaster } from "sonner";
 
 const App = () => {
   return (
@@ -13,8 +15,10 @@ const App = () => {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/login" element={<LoginPage />} />
           </Routes>
         </Suspense>
+        <Toaster />
         <Footer />
       </Router>
     </>
